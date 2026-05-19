@@ -107,5 +107,4 @@ No automated test suite exists; verification is manual:
 
 ## Notes
 
-This directory is not a git repository, so the design doc is written but not
-committed.
+Repo initialized 2026-05-19; this work is part of the `main` baseline commit.

@@ -188,5 +188,5 @@ options remain hardcoded in HTML (not era-filtered).
 
 ## Notes
 
-This directory is not a git repository, so the design doc is written but not
-committed.
+Repo initialized 2026-05-19; this work lands on branch
+`feature/era-segmented-presets`.

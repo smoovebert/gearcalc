@@ -2,6 +2,198 @@
    Gear Calculator Logic
    ============================================ */
 
+/* ----------------------------------------------------------------
+   Preset catalog. Pure data — NO document references (node-testable).
+   Shape: PRESETS[component][set] = [ { group, options:[[label,value]] } ]
+   value is a comma-separated teeth string consumed by parseGears().
+   "Custom..." is appended by buildPresetOptions(), never stored here.
+   ---------------------------------------------------------------- */
+const ones = (label, ...teeth) => ({
+  group: label,
+  options: teeth.map(t => [`${t}t`, String(t)]),
+});
+
+const PRESETS = {
+  chainring: {
+    modern: [
+      { group: 'Road 2x', options: [
+        ['53/39', '53, 39'], ['52/36', '52, 36'], ['50/34', '50, 34'],
+        ['48/32', '48, 32'], ['46/33', '46, 33'], ['52/39', '52, 39'] ] },
+      { group: 'Gravel 2x', options: [
+        ['48/31', '48, 31'], ['46/30', '46, 30'], ['43/30', '43, 30'] ] },
+      { group: 'MTB 2x', options: [
+        ['38/28', '38, 28'], ['36/26', '36, 26'], ['36/22', '36, 22'] ] },
+      ones('Road/Gravel 1x', 54, 52, 50, 48, 46, 44, 42, 40, 38),
+      ones('MTB 1x', 36, 34, 32, 30, 28),
+    ],
+    vintage: [
+      { group: 'Road 2x', options: [
+        ['53/42', '53, 42'], ['52/42', '52, 42'], ['52/39', '52, 39'],
+        ['50/40', '50, 40'] ] },
+      { group: 'Road Triple', options: [
+        ['52/42/30', '52, 42, 30'], ['50/40/30', '50, 40, 30'],
+        ['52/40/30', '52, 40, 30'], ['50/39/30', '50, 39, 30'] ] },
+      { group: 'Touring Triple', options: [
+        ['48/36/26', '48, 36, 26'], ['46/36/26', '46, 36, 26'],
+        ['48/38/28', '48, 38, 28'] ] },
+      { group: 'MTB Triple', options: [
+        ['44/32/22', '44, 32, 22'], ['42/32/22', '42, 32, 22'],
+        ['40/30/22', '40, 30, 22'] ] },
+    ],
+    single: [
+      ones('Track / Single / BMX / FGFS',
+        57, 55, 53, 50, 48, 46, 44, 36, 33, 30, 28, 25, 23),
+    ],
+  },
+  cassette: {
+    modern: [
+      { group: 'Road 11-speed', options: [
+        ['11-23', '11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 23'],
+        ['11-25', '11, 12, 13, 14, 15, 16, 17, 19, 21, 23, 25'],
+        ['12-25', '12, 13, 14, 15, 16, 17, 18, 19, 21, 23, 25'],
+        ['11-28', '11, 12, 13, 14, 15, 17, 19, 21, 23, 25, 28'],
+        ['12-30', '12, 13, 14, 15, 16, 17, 19, 21, 24, 27, 30'],
+        ['11-30', '11, 12, 13, 14, 15, 17, 19, 21, 24, 27, 30'],
+        ['11-32', '11, 12, 13, 14, 16, 18, 20, 22, 25, 28, 32'],
+        ['11-34', '11, 12, 13, 14, 16, 18, 20, 22, 25, 28, 34'],
+        ['11-36', '11, 12, 13, 14, 16, 18, 20, 22, 25, 30, 36'] ] },
+      { group: 'Road 12-speed Shimano', options: [
+        ['11-28', '11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 24, 28'],
+        ['11-30', '11, 12, 13, 14, 15, 16, 17, 19, 21, 24, 27, 30'],
+        ['11-32', '11, 12, 13, 14, 15, 16, 17, 19, 21, 24, 28, 32'],
+        ['11-34', '11, 12, 13, 14, 15, 17, 19, 21, 24, 27, 30, 34'],
+        ['11-36', '11, 12, 13, 14, 15, 17, 19, 21, 24, 28, 32, 36'] ] },
+      { group: 'Road 12-speed SRAM', options: [
+        ['10-26', '10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 26'],
+        ['10-28', '10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 24, 28'],
+        ['10-30', '10, 11, 12, 13, 14, 15, 16, 17, 19, 22, 25, 30'],
+        ['10-33', '10, 11, 12, 13, 14, 15, 17, 19, 21, 24, 28, 33'],
+        ['10-36', '10, 11, 12, 13, 14, 16, 18, 21, 24, 28, 32, 36'] ] },
+      { group: 'Road 13-speed Campagnolo', options: [
+        ['9-29', '9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 22, 25, 29'],
+        ['10-34', '10, 11, 12, 13, 14, 15, 16, 17, 19, 22, 25, 29, 34'],
+        ['10-39', '10, 11, 12, 13, 14, 15, 17, 19, 22, 25, 29, 34, 39'] ] },
+      { group: 'Wide-range 11-speed', options: [
+        ['11-40', '11, 13, 15, 17, 19, 21, 24, 27, 31, 35, 40'],
+        ['11-42 Shimano', '11, 13, 15, 17, 19, 21, 24, 28, 32, 37, 42'],
+        ['10-42 SRAM', '10, 12, 14, 16, 18, 21, 24, 28, 32, 37, 42'],
+        ['11-45', '11, 13, 15, 17, 19, 21, 24, 28, 33, 39, 45'],
+        ['11-46 Shimano', '11, 13, 15, 17, 19, 22, 25, 28, 32, 37, 46'],
+        ['10-46', '10, 12, 14, 16, 18, 21, 24, 28, 33, 39, 46'],
+        ['11-50 SunRace', '11, 13, 15, 18, 21, 24, 28, 32, 36, 42, 50'],
+        ['11-51 SunRace', '11, 13, 15, 18, 21, 24, 28, 32, 36, 42, 51'] ] },
+      { group: 'Gravel 12-speed', options: [
+        ['10-42', '10, 11, 13, 15, 17, 19, 21, 24, 28, 32, 36, 42'],
+        ['10-44', '10, 11, 13, 15, 17, 19, 22, 25, 28, 32, 36, 44'],
+        ['10-46 SRAM XPLR', '10, 11, 13, 15, 17, 20, 23, 26, 30, 34, 40, 46'] ] },
+      { group: 'MTB 10-speed', options: [
+        ['11-36', '11, 13, 15, 17, 19, 21, 24, 28, 32, 36'],
+        ['11-42', '11, 13, 15, 18, 21, 24, 28, 32, 36, 42'],
+        ['11-46', '11, 13, 15, 18, 21, 24, 28, 34, 40, 46'] ] },
+      { group: 'MTB 11-speed', options: [
+        ['11-42 Shimano', '11, 13, 15, 17, 19, 21, 24, 28, 32, 37, 42'],
+        ['11-46 Shimano', '11, 13, 15, 17, 19, 21, 24, 28, 32, 37, 46'],
+        ['10-42 SRAM NX', '10, 12, 14, 16, 18, 21, 24, 28, 32, 36, 42'],
+        ['11-40', '11, 13, 15, 17, 19, 21, 24, 28, 32, 36, 40'] ] },
+      { group: 'MTB 12-speed SRAM', options: [
+        ['10-50 GX/X01/XX1', '10, 12, 14, 16, 18, 21, 24, 28, 32, 36, 42, 50'],
+        ['10-52 GX/X01/XX1', '10, 12, 14, 16, 18, 21, 24, 28, 33, 39, 45, 52'] ] },
+      { group: 'MTB 12-speed Shimano', options: [
+        ['10-51 XT/XTR', '10, 12, 14, 16, 18, 21, 24, 28, 32, 36, 42, 51'],
+        ['10-51 Deore', '10, 12, 14, 16, 18, 21, 24, 28, 33, 39, 45, 51'],
+        ['10-51 SLX', '10, 12, 14, 16, 18, 21, 24, 28, 32, 36, 45, 51'] ] },
+    ],
+    vintage: [
+      { group: '5-speed', options: [
+        ['14-28', '14, 17, 20, 24, 28'], ['14-34', '14, 18, 22, 28, 34'] ] },
+      { group: '6-speed', options: [
+        ['13-28', '13, 15, 17, 19, 23, 28'], ['14-28', '14, 16, 18, 21, 24, 28'],
+        ['14-32', '14, 17, 20, 24, 28, 32'], ['13-30', '13, 15, 18, 21, 25, 30'] ] },
+      { group: '7-speed', options: [
+        ['13-28', '13, 15, 17, 19, 21, 24, 28'],
+        ['14-32', '14, 16, 18, 21, 24, 28, 32'],
+        ['13-30', '13, 15, 17, 20, 23, 26, 30'],
+        ['11-28', '11, 13, 15, 17, 20, 24, 28'],
+        ['11-32', '11, 13, 15, 18, 21, 24, 32'] ] },
+      { group: 'Road 8-speed', options: [
+        ['12-23', '12, 13, 14, 15, 17, 19, 21, 23'],
+        ['11-24', '11, 12, 13, 14, 16, 18, 21, 24'],
+        ['11-26', '11, 13, 15, 17, 19, 21, 23, 26'],
+        ['12-26', '12, 13, 14, 15, 17, 19, 21, 26'],
+        ['11-32', '11, 13, 15, 18, 21, 24, 28, 32'] ] },
+      { group: 'Road 9-speed', options: [
+        ['11-23', '11, 12, 13, 14, 15, 17, 19, 21, 23'],
+        ['12-23', '12, 13, 14, 15, 16, 17, 19, 21, 23'],
+        ['11-25', '11, 12, 13, 14, 15, 17, 19, 21, 25'],
+        ['12-26', '12, 13, 14, 15, 17, 19, 21, 23, 26'],
+        ['11-30', '11, 12, 14, 16, 18, 20, 23, 26, 30'],
+        ['12-34', '12, 14, 16, 18, 20, 23, 26, 30, 34'] ] },
+      { group: 'Road 10-speed', options: [
+        ['11-23', '11, 12, 13, 14, 15, 16, 17, 19, 21, 23'],
+        ['11-25', '11, 12, 13, 14, 15, 16, 17, 19, 21, 25'],
+        ['12-25', '12, 13, 14, 15, 16, 17, 18, 19, 21, 25'],
+        ['11-26', '11, 12, 13, 14, 15, 16, 17, 19, 21, 26'],
+        ['11-28', '11, 12, 13, 14, 15, 17, 19, 21, 24, 28'],
+        ['12-28', '12, 13, 14, 15, 16, 17, 19, 21, 24, 28'],
+        ['12-30', '12, 13, 14, 15, 17, 19, 21, 24, 27, 30'],
+        ['11-32', '11, 12, 14, 16, 18, 20, 22, 25, 28, 32'] ] },
+      { group: 'MTB 9-speed', options: [
+        ['11-34', '11, 13, 15, 17, 20, 23, 26, 30, 34'],
+        ['12-36', '12, 14, 16, 18, 21, 24, 28, 32, 36'] ] },
+    ],
+    single: [
+      ones('Single cog', 22, 20, 18, 16, 15, 14, 13, 12, 11, 10, 9, 8),
+    ],
+  },
+};
+
+// Render a select's options from a PRESETS group list, then append Custom.
+function buildPresetOptions(selectEl, groups) {
+  selectEl.replaceChildren();
+  for (const { group, options } of groups) {
+    const og = document.createElement('optgroup');
+    og.label = group;
+    for (const [label, value] of options) {
+      const opt = document.createElement('option');
+      opt.value = value;
+      opt.textContent = label;
+      og.appendChild(opt);
+    }
+    selectEl.appendChild(og);
+  }
+  const other = document.createElement('optgroup');
+  other.label = 'Other';
+  const customOpt = document.createElement('option');
+  customOpt.value = 'custom';
+  customOpt.textContent = 'Custom...';
+  other.appendChild(customOpt);
+  selectEl.appendChild(other);
+}
+
+// Active era ('modern'|'vintage'|'single') for a drivetrain ('a'|'b').
+function getEra(suffix) {
+  const active = document.querySelector(`#era-${suffix} .toggle-btn.active`);
+  return active ? active.dataset.era : 'modern';
+}
+
+// Repopulate a drivetrain's chainring + cassette selects for its era,
+// reset to the first option, hide/sync custom inputs, recompute.
+function applyEra(suffix) {
+  const era = getEra(suffix);
+  const cr = document.getElementById(`chainring-preset-${suffix}`);
+  const ca = document.getElementById(`cassette-preset-${suffix}`);
+  buildPresetOptions(cr, PRESETS.chainring[era]);
+  buildPresetOptions(ca, PRESETS.cassette[era]);
+  cr.selectedIndex = 0;
+  ca.selectedIndex = 0;
+  for (const [sel, customId] of [[cr, `chainrings-${suffix}`], [ca, `cassette-${suffix}`]]) {
+    const custom = document.getElementById(customId);
+    custom.classList.remove('visible');
+    custom.value = sel.value;
+  }
+  update();
+}
+
 // Parse a comma-separated list of cog/chainring teeth counts.
 // Only bare positive integers are accepted; any non-integer token
 // (including "11-32" range shorthand) is dropped rather than silently
@@ -155,7 +347,7 @@ function renderChart(gearsA, gearsB) {
 
 // Get current speed unit
 function getSpeedUnit() {
-  const activeBtn = document.querySelector('.toggle-btn.active');
+  const activeBtn = document.querySelector('.toggle-btn[data-unit].active');
   return activeBtn ? activeBtn.dataset.unit : 'kmh';
 }
 
@@ -289,11 +481,40 @@ function update() {
   renderTable('table-b', chainringsB, cassetteB, wheelCircumB, crankB, cadence);
 }
 
-// Initialize preset dropdowns
+// Populate all four preset selects for their default era (Modern), then
+// apply the load defaults so the page opens with the same setup as before.
+const LOAD_DEFAULTS = {
+  'chainring-preset-a': '50, 34',
+  'cassette-preset-a': '11, 12, 13, 14, 16, 18, 20, 22, 25, 28, 32',
+  'chainring-preset-b': '40',
+  'cassette-preset-b': '10, 12, 14, 16, 18, 21, 24, 28, 33, 39, 45, 52',
+};
+for (const suffix of ['a', 'b']) {
+  buildPresetOptions(document.getElementById(`chainring-preset-${suffix}`), PRESETS.chainring.modern);
+  buildPresetOptions(document.getElementById(`cassette-preset-${suffix}`), PRESETS.cassette.modern);
+}
+for (const [id, value] of Object.entries(LOAD_DEFAULTS)) {
+  document.getElementById(id).value = value;
+}
+
+// Initialize preset dropdowns (selects are now populated)
 setupPresetDropdown('chainring-preset-a', 'chainrings-a');
 setupPresetDropdown('chainring-preset-b', 'chainrings-b');
 setupPresetDropdown('cassette-preset-a', 'cassette-a');
 setupPresetDropdown('cassette-preset-b', 'cassette-b');
+
+// Per-drivetrain Era toggle (Modern / Vintage / Single). Scoped to its own
+// container so it cannot disturb the speed-unit toggle (same .toggle-btn class).
+['a', 'b'].forEach(suffix => {
+  const container = document.getElementById(`era-${suffix}`);
+  container.querySelectorAll('.toggle-btn[data-era]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      container.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      applyEra(suffix);
+    });
+  });
+});
 
 // Listen for other input changes
 document.querySelectorAll('#wheel-a, #wheel-b, #tire-a, #tire-b, #crank-a, #crank-b, #cadence').forEach(input => {
@@ -301,10 +522,10 @@ document.querySelectorAll('#wheel-a, #wheel-b, #tire-a, #tire-b, #crank-a, #cran
   input.addEventListener('input', update);
 });
 
-// Toggle unit buttons
-document.querySelectorAll('.toggle-btn').forEach(btn => {
+// Speed-unit toggle — scoped to [data-unit] so era toggles are unaffected
+document.querySelectorAll('.toggle-btn[data-unit]').forEach(btn => {
   btn.addEventListener('click', () => {
-    document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.toggle-btn[data-unit]').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     update();
   });
@@ -312,25 +533,23 @@ document.querySelectorAll('.toggle-btn').forEach(btn => {
 
 // Copy Drivetrain A → B
 document.getElementById('copy-a-to-b').addEventListener('click', () => {
+  // Mirror A's era first so B's option lists match A's set, then rebuild B.
+  const eraA = getEra('a');
+  document.querySelectorAll('#era-b .toggle-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.era === eraA);
+  });
+  applyEra('b');
+
+  // Mirror the specific selections + custom values (B now has matching options)
   const presetA = document.getElementById('chainring-preset-a');
-  const presetB = document.getElementById('chainring-preset-b');
-  presetB.value = presetA.value;
+  document.getElementById('chainring-preset-b').value = presetA.value;
   document.getElementById('chainrings-b').value = document.getElementById('chainrings-a').value;
-  if (presetA.value === 'custom') {
-    document.getElementById('chainrings-b').classList.add('visible');
-  } else {
-    document.getElementById('chainrings-b').classList.remove('visible');
-  }
+  document.getElementById('chainrings-b').classList.toggle('visible', presetA.value === 'custom');
 
   const cassetteA = document.getElementById('cassette-preset-a');
-  const cassetteB = document.getElementById('cassette-preset-b');
-  cassetteB.value = cassetteA.value;
+  document.getElementById('cassette-preset-b').value = cassetteA.value;
   document.getElementById('cassette-b').value = document.getElementById('cassette-a').value;
-  if (cassetteA.value === 'custom') {
-    document.getElementById('cassette-b').classList.add('visible');
-  } else {
-    document.getElementById('cassette-b').classList.remove('visible');
-  }
+  document.getElementById('cassette-b').classList.toggle('visible', cassetteA.value === 'custom');
 
   document.getElementById('wheel-b').value = document.getElementById('wheel-a').value;
   document.getElementById('tire-b').value = document.getElementById('tire-a').value;
