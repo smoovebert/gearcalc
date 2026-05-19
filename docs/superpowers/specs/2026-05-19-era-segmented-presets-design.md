@@ -86,7 +86,11 @@ single-speed/track/BMX fronts are free independent choices, not products.
 **cassette.modern**: Road 11-speed, Road 12-speed Shimano, Road 12-speed
 SRAM, Road 13-speed Campagnolo, Wide-range 11-speed, Gravel 12-speed, MTB
 10-speed, **MTB 11-speed *(new)*** (11-42, 11-46, 10-42 NX, 11-40), MTB
-12-speed SRAM, MTB 12-speed Shimano.
+12-speed SRAM, MTB 12-speed Shimano, **Campagnolo 12-speed *(new)***
+(11-29/32/34, 10-27/29), **Shimano CUES / LinkGlide *(new)*** (11/10/9-speed
+11-50…11-41), **microSHIFT Advent / Advent X *(new)*** (9s 11-46/11-48, 10s
+11-48), **Rotor 1×13 *(new)*** (10-36/39/46/52), **SRAM Apex 10-speed
+*(new)*** (11-28/32/36).
 
 **cassette.vintage**: **5-speed *(new)*** (14-28, 14-34), **6-speed *(new)***
 (13-28, 14-28, 14-32, 13-30), 7-speed, Road 8-speed, Road 9-speed, Road
