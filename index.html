@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gear Calculator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+
+    <header class="header">
+      <div class="header-left">
+        <h1 class="logo">Gear Calc</h1>
+        <p class="tagline">Bicycle Drivetrain Comparison</p>
+      </div>
+      <button type="button" class="dark-toggle" id="dark-toggle" aria-label="Toggle dark mode">
+        <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="5"></circle>
+          <line x1="12" y1="1" x2="12" y2="3"></line>
+          <line x1="12" y1="21" x2="12" y2="23"></line>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+          <line x1="1" y1="12" x2="3" y2="12"></line>
+          <line x1="21" y1="12" x2="23" y2="12"></line>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+        </svg>
+        <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+        </svg>
+      </button>
+    </header>
+
+    <main class="main">
+
+      <!-- Drivetrain A -->
+      <section class="drivetrain" id="drivetrain-a">
+        <div class="drivetrain-header">
+          <h2 class="drivetrain-title">Drivetrain A</h2>
+          <div class="color-indicator" style="background: var(--color-a)"></div>
+        </div>
+
+        <div class="input-group">
+          <label class="label">Chainring(s)</label>
+          <select class="input" id="chainring-preset-a">
+            <optgroup label="Road 2x">
+              <option value="53, 39">53/39</option>
+              <option value="52, 36">52/36</option>
+              <option value="50, 34" selected>50/34</option>
+              <option value="48, 32">48/32</option>
+            </optgroup>
+            <optgroup label="Gravel 2x">
+              <option value="48, 31">48/31</option>
+              <option value="46, 30">46/30</option>
+              <option value="43, 30">43/30</option>
+            </optgroup>
+            <optgroup label="3x">
+              <option value="48, 36, 26">48/36/26</option>
+              <option value="46, 36, 26">46/36/26</option>
+              <option value="44, 34, 24">44/34/24</option>
+              <option value="42, 34, 24">42/34/24</option>
+            </optgroup>
+            <optgroup label="1x">
+              <option value="54">54t</option>
+              <option value="52">52t</option>
+              <option value="50">50t</option>
+              <option value="48">48t</option>
+              <option value="46">46t</option>
+              <option value="44">44t</option>
+              <option value="42">42t</option>
+              <option value="40">40t</option>
+              <option value="38">38t</option>
+              <option value="36">36t</option>
+              <option value="34">34t</option>
+            </optgroup>
+            <optgroup label="Other">
+              <option value="custom">Custom...</option>
+            </optgroup>
+          </select>
+          <input type="text" class="input input-custom" id="chainrings-a" value="50, 34" placeholder="e.g. 50, 34">
+        </div>
+
+        <div class="input-group">
+          <label class="label">Cassette</label>
+          <select class="input" id="cassette-preset-a">
+            <optgroup label="7-speed">
+              <option value="13, 15, 17, 19, 21, 24, 28">13-28</option>
+              <option value="14, 16, 18, 21, 24, 28, 32">14-32</option>
+              <option value="13, 15, 17, 20, 23, 26, 30">13-30</option>
+              <option value="11, 13, 15, 17, 20, 24, 28">11-28</option>
+              <option value="11, 13, 15, 18, 21, 24, 32">11-32</option>
+            </optgroup>
+            <optgroup label="Road 8-speed">
+              <option value="12, 13, 14, 15, 17, 19, 21, 23">12-23</option>
+              <option value="11, 12, 13, 14, 16, 18, 21, 24">11-24</option>
+              <option value="11, 13, 15, 17, 19, 21, 23, 26">11-26</option>
+              <option value="12, 13, 14, 15, 17, 19, 21, 26">12-26</option>
+              <option value="11, 13, 15, 18, 21, 24, 28, 32">11-32</option>
+            </optgroup>
+            <optgroup label="Road 9-speed">
+              <option value="11, 12, 13, 14, 15, 17, 19, 21, 23">11-23</option>
+              <option value="12, 13, 14, 15, 16, 17, 19, 21, 23">12-23</option>
+              <option value="11, 12, 13, 14, 15, 17, 19, 21, 25">11-25</option>
+              <option value="12, 13, 14, 15, 17, 19, 21, 23, 26">12-26</option>
+              <option value="11, 12, 14, 16, 18, 20, 23, 26, 30">11-30</option>
+              <option value="12, 14, 16, 18, 20, 23, 26, 30, 34">12-34</option>
+            </optgroup>
+            <optgroup label="Road 10-speed">
+              <option value="11, 12, 13, 14, 15, 16, 17, 19, 21, 23">11-23</option>
+              <option value="11, 12, 13, 14, 15, 16, 17, 19, 21, 25">11-25</option>
+              <option value="12, 13, 14, 15, 16, 17, 18, 19, 21, 25">12-25</option>
+              <option value="11, 12, 13, 14, 15, 16, 17, 19, 21, 26">11-26</option>
+              <option value="11, 12, 13, 14, 15, 17, 19, 21, 24, 28">11-28</option>
+              <option value="12, 13, 14, 15, 16, 17, 19, 21, 24, 28">12-28</option>
+              <option value="12, 13, 14, 15, 17, 19, 21, 24, 27, 30">12-30</option>
+              <option value="11, 12, 14, 16, 18, 20, 22, 25, 28, 32">11-32</option>
+            </optgroup>
+            <optgroup label="Road 11-speed">
+              <option value="11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 23">11-23</option>
+              <option value="11, 12, 13, 14, 15, 16, 17, 19, 21, 23, 25">11-25</option>
+              <option value="12, 13, 14, 15, 16, 17, 18, 19, 21, 23, 25">12-25</option>
+              <option value="11, 12, 13, 14, 15, 17, 19, 21, 23, 25, 28">11-28</option>
+              <option value="12, 13, 14, 15, 16, 17, 19, 21, 24, 27, 30">12-30</option>
+              <option value="11, 12, 13, 14, 15, 17, 19, 21, 24, 27, 30">11-30</option>
+              <option value="11, 12, 13, 14, 16, 18, 20, 22, 25, 28, 32" selected>11-32</option>
+              <option value="11, 12, 13, 14, 16, 18, 20, 22, 25, 28, 34">11-34</option>
+              <option value="11, 12, 13, 14, 16, 18, 20, 22, 25, 30, 36">11-36</option>
+            </optgroup>
+            <optgroup label="Road 12-speed Shimano">
+              <option value="11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 24, 28">11-28</option>
+              <option value="11, 12, 13, 14, 15, 16, 17, 19, 21, 24, 27, 30">11-30</option>
+              <option value="11, 12, 13, 14, 15, 16, 17, 19, 21, 24, 28, 32">11-32</option>
+              <option value="11, 12, 13, 14, 15, 17, 19, 21, 24, 27, 30, 34">11-34</option>
+              <option value="11, 12, 13, 14, 15, 17, 19, 21, 24, 28, 32, 36">11-36</option>
+            </optgroup>
+            <optgroup label="Road 12-speed SRAM">
+              <option value="10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 26">10-26</option>
+              <option value="10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 24, 28">10-28</option>
+              <option value="10, 11, 12, 13, 14, 15, 16, 17, 19, 22, 25, 30">10-30</option>
+              <option value="10, 11, 12, 13, 14, 15, 17, 19, 21, 24, 28, 33">10-33</option>
+              <option value="10, 11, 12, 13, 14, 16, 18, 21, 24, 28, 32, 36">10-36</option>
+            </optgroup>
+            <optgroup label="Road 13-speed Campagnolo">
+              <option value="9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 22, 25, 29">9-29</option>
+              <option value="10, 11, 12, 13, 14, 15, 16, 17, 19, 22, 25, 29, 34">10-34</option>
+              <option value="10, 11, 12, 13, 14, 15, 17, 19, 22, 25, 29, 34, 39">10-39</option>
+            </optgroup>
+            <optgroup label="Wide-range 11-speed">
+              <option value="11, 13, 15, 17, 19, 21, 24, 27, 31, 35, 40">11-40</option>
+              <option value="11, 13, 15, 17, 19, 21, 24, 28, 32, 37, 42">11-42 Shimano</option>
+              <option value="10, 12, 14, 16, 18, 21, 24, 28, 32, 37, 42">10-42 SRAM</option>
+              <option value="11, 13, 15, 17, 19, 21, 24, 28, 33, 39, 45">11-45</option>
+              <option value="11, 13, 15, 17, 19, 22, 25, 28, 32, 37, 46">11-46 Shimano</option>
+              <option value="10, 12, 14, 16, 18, 21, 24, 28, 33, 39, 46">10-46</option>
+              <option value="11, 13, 15, 18, 21, 24, 28, 32, 36, 42, 50">11-50 SunRace</option>
+              <option value="11, 13, 15, 18, 21, 24, 28, 32, 36, 42, 51">11-51 SunRace</option>
+            </optgroup>
+            <optgroup label="Gravel 12-speed">
+              <option value="10, 11, 13, 15, 17, 19, 21, 24, 28, 32, 36, 42">10-42</option>
+              <option value="10, 11, 13, 15, 17, 19, 22, 25, 28, 32, 36, 44">10-44</option>
+              <option value="10, 11, 13, 15, 17, 20, 23, 26, 30, 34, 40, 46">10-46 SRAM XPLR</option>
+            </optgroup>
+            <optgroup label="MTB 9-speed">
+              <option value="11, 13, 15, 17, 20, 23, 26, 30, 34">11-34</option>
+              <option value="12, 14, 16, 18, 21, 24, 28, 32, 36">12-36</option>
+            </optgroup>
+            <optgroup label="MTB 10-speed">
+              <option value="11, 13, 15, 17, 19, 21, 24, 28, 32, 36">11-36</option>
+              <option value="11, 13, 15, 18, 21, 24, 28, 32, 36, 42">11-42</option>
+              <option value="11, 13, 15, 18, 21, 24, 28, 34, 40, 46">11-46</option>
+            </optgroup>
+            <optgroup label="MTB 12-speed SRAM">
+              <option value="10, 12, 14, 16, 18, 21, 24, 28, 32, 36, 42, 50">10-50 GX/X01/XX1</option>
+              <option value="10, 12, 14, 16, 18, 21, 24, 28, 33, 39, 45, 52">10-52 GX/X01/XX1</option>
+            </optgroup>
+            <optgroup label="MTB 12-speed Shimano">
+              <option value="10, 12, 14, 16, 18, 21, 24, 28, 32, 36, 42, 51">10-51 XT/XTR</option>
+              <option value="10, 12, 14, 16, 18, 21, 24, 28, 33, 39, 45, 51">10-51 Deore</option>
+              <option value="10, 12, 14, 16, 18, 21, 24, 28, 32, 36, 45, 51">10-51 SLX</option>
+            </optgroup>
+            <optgroup label="Other">
+              <option value="custom">Custom...</option>
+            </optgroup>
+          </select>
+          <input type="text" class="input input-custom" id="cassette-a" value="11, 12, 13, 14, 16, 18, 20, 22, 25, 28, 32" placeholder="e.g. 11, 13, 15, 17...">
+        </div>
+
+        <div class="input-row">
+          <div class="input-group">
+            <label class="label">Wheel (BSD)</label>
+            <select class="input" id="wheel-a">
+              <option value="305">16"</option>
+              <option value="457">18"</option>
+              <option value="406">20"</option>
+              <option value="507">24"</option>
+              <option value="559">26"</option>
+              <option value="584">27.5" / 650b</option>
+              <option value="622" selected>700c / 29"</option>
+              <option value="635">28"</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label class="label">Tire Width</label>
+            <select class="input" id="tire-a">
+              <optgroup label="Road">
+                <option value="20">20mm</option>
+                <option value="23">23mm</option>
+                <option value="25" selected>25mm</option>
+                <option value="26">26mm</option>
+                <option value="28">28mm</option>
+                <option value="30">30mm</option>
+                <option value="32">32mm</option>
+              </optgroup>
+              <optgroup label="Gravel / Touring">
+                <option value="35">35mm</option>
+                <option value="38">38mm</option>
+                <option value="40">40mm</option>
+                <option value="42">42mm</option>
+                <option value="44">44mm</option>
+                <option value="47">47mm</option>
+              </optgroup>
+              <optgroup label="MTB">
+                <option value="50">50mm / 2.0"</option>
+                <option value="54">54mm / 2.1"</option>
+                <option value="57">57mm / 2.25"</option>
+                <option value="60">60mm / 2.35"</option>
+                <option value="63">63mm / 2.5"</option>
+                <option value="66">66mm / 2.6"</option>
+              </optgroup>
+              <optgroup label="Plus / Fat">
+                <option value="71">71mm / 2.8"</option>
+                <option value="76">76mm / 3.0"</option>
+                <option value="96">96mm / 3.8"</option>
+                <option value="102">102mm / 4.0"</option>
+                <option value="114">114mm / 4.5"</option>
+                <option value="122">122mm / 4.8"</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+        <div class="input-group">
+          <label class="label">Crank Length (mm)</label>
+          <select class="input" id="crank-a">
+            <option value="160">160</option>
+            <option value="165">165</option>
+            <option value="167.5">167.5</option>
+            <option value="170" selected>170</option>
+            <option value="172.5">172.5</option>
+            <option value="175">175</option>
+            <option value="177.5">177.5</option>
+            <option value="180">180</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Drivetrain B -->
+      <section class="drivetrain" id="drivetrain-b">
+        <div class="drivetrain-header">
+          <h2 class="drivetrain-title">Drivetrain B</h2>
+          <div style="display: flex; align-items: center; gap: var(--space-2);">
+            <button type="button" class="copy-btn" id="copy-a-to-b">← copy A</button>
+            <div class="color-indicator" style="background: var(--color-b)"></div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label class="label">Chainring(s)</label>
+          <select class="input" id="chainring-preset-b">
+            <optgroup label="Road 2x">
+              <option value="53, 39">53/39</option>
+              <option value="52, 36">52/36</option>
+              <option value="50, 34">50/34</option>
+              <option value="48, 32">48/32</option>
+            </optgroup>
+            <optgroup label="Gravel 2x">
+              <option value="48, 31">48/31</option>
+              <option value="46, 30">46/30</option>
+              <option value="43, 30">43/30</option>
+            </optgroup>
+            <optgroup label="3x">
+              <option value="48, 36, 26">48/36/26</option>
+              <option value="46, 36, 26">46/36/26</option>
+              <option value="44, 34, 24">44/34/24</option>
+              <option value="42, 34, 24">42/34/24</option>
+            </optgroup>
+            <optgroup label="1x">
+              <option value="54">54t</option>
+              <option value="52">52t</option>
+              <option value="50">50t</option>
+              <option value="48">48t</option>
+              <option value="46">46t</option>
+              <option value="44">44t</option>
+              <option value="42">42t</option>
+              <option value="40" selected>40t</option>
+              <option value="38">38t</option>
+              <option value="36">36t</option>
+              <option value="34">34t</option>
+            </optgroup>
+            <optgroup label="Other">
+              <option value="custom">Custom...</option>
+            </optgroup>
+          </select>
+          <input type="text" class="input input-custom" id="chainrings-b" value="40" placeholder="e.g. 40">
+        </div>
+
+        <div class="input-group">
+          <label class="label">Cassette</label>
+          <select class="input" id="cassette-preset-b">
+            <optgroup label="7-speed">
+              <option value="13, 15, 17, 19, 21, 24, 28">13-28</option>
+              <option value="14, 16, 18, 21, 24, 28, 32">14-32</option>
+              <option value="13, 15, 17, 20, 23, 26, 30">13-30</option>
+              <option value="11, 13, 15, 17, 20, 24, 28">11-28</option>
+              <option value="11, 13, 15, 18, 21, 24, 32">11-32</option>
+            </optgroup>
+            <optgroup label="Road 8-speed">
+              <option value="12, 13, 14, 15, 17, 19, 21, 23">12-23</option>
+              <option value="11, 12, 13, 14, 16, 18, 21, 24">11-24</option>
+              <option value="11, 13, 15, 17, 19, 21, 23, 26">11-26</option>
+              <option value="12, 13, 14, 15, 17, 19, 21, 26">12-26</option>
+              <option value="11, 13, 15, 18, 21, 24, 28, 32">11-32</option>
+            </optgroup>
+            <optgroup label="Road 9-speed">
+              <option value="11, 12, 13, 14, 15, 17, 19, 21, 23">11-23</option>
+              <option value="12, 13, 14, 15, 16, 17, 19, 21, 23">12-23</option>
+              <option value="11, 12, 13, 14, 15, 17, 19, 21, 25">11-25</option>
+              <option value="12, 13, 14, 15, 17, 19, 21, 23, 26">12-26</option>
+              <option value="11, 12, 14, 16, 18, 20, 23, 26, 30">11-30</option>
+              <option value="12, 14, 16, 18, 20, 23, 26, 30, 34">12-34</option>
+            </optgroup>
+            <optgroup label="Road 10-speed">
+              <option value="11, 12, 13, 14, 15, 16, 17, 19, 21, 23">11-23</option>
+              <option value="11, 12, 13, 14, 15, 16, 17, 19, 21, 25">11-25</option>
+              <option value="12, 13, 14, 15, 16, 17, 18, 19, 21, 25">12-25</option>
+              <option value="11, 12, 13, 14, 15, 16, 17, 19, 21, 26">11-26</option>
+              <option value="11, 12, 13, 14, 15, 17, 19, 21, 24, 28">11-28</option>
+              <option value="12, 13, 14, 15, 16, 17, 19, 21, 24, 28">12-28</option>
+              <option value="12, 13, 14, 15, 17, 19, 21, 24, 27, 30">12-30</option>
+              <option value="11, 12, 14, 16, 18, 20, 22, 25, 28, 32">11-32</option>
+            </optgroup>
+            <optgroup label="Road 11-speed">
+              <option value="11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 23">11-23</option>
+              <option value="11, 12, 13, 14, 15, 16, 17, 19, 21, 23, 25">11-25</option>
+              <option value="12, 13, 14, 15, 16, 17, 18, 19, 21, 23, 25">12-25</option>
+              <option value="11, 12, 13, 14, 15, 17, 19, 21, 23, 25, 28">11-28</option>
+              <option value="12, 13, 14, 15, 16, 17, 19, 21, 24, 27, 30">12-30</option>
+              <option value="11, 12, 13, 14, 15, 17, 19, 21, 24, 27, 30">11-30</option>
+              <option value="11, 12, 13, 14, 16, 18, 20, 22, 25, 28, 32">11-32</option>
+              <option value="11, 12, 13, 14, 16, 18, 20, 22, 25, 28, 34">11-34</option>
+              <option value="11, 12, 13, 14, 16, 18, 20, 22, 25, 30, 36">11-36</option>
+            </optgroup>
+            <optgroup label="Road 12-speed Shimano">
+              <option value="11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 24, 28">11-28</option>
+              <option value="11, 12, 13, 14, 15, 16, 17, 19, 21, 24, 27, 30">11-30</option>
+              <option value="11, 12, 13, 14, 15, 16, 17, 19, 21, 24, 28, 32">11-32</option>
+              <option value="11, 12, 13, 14, 15, 17, 19, 21, 24, 27, 30, 34">11-34</option>
+              <option value="11, 12, 13, 14, 15, 17, 19, 21, 24, 28, 32, 36">11-36</option>
+            </optgroup>
+            <optgroup label="Road 12-speed SRAM">
+              <option value="10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 26">10-26</option>
+              <option value="10, 11, 12, 13, 14, 15, 16, 17, 19, 21, 24, 28">10-28</option>
+              <option value="10, 11, 12, 13, 14, 15, 16, 17, 19, 22, 25, 30">10-30</option>
+              <option value="10, 11, 12, 13, 14, 15, 17, 19, 21, 24, 28, 33">10-33</option>
+              <option value="10, 11, 12, 13, 14, 16, 18, 21, 24, 28, 32, 36">10-36</option>
+            </optgroup>
+            <optgroup label="Road 13-speed Campagnolo">
+              <option value="9, 10, 11, 12, 13, 14, 15, 16, 17, 19, 22, 25, 29">9-29</option>
+              <option value="10, 11, 12, 13, 14, 15, 16, 17, 19, 22, 25, 29, 34">10-34</option>
+              <option value="10, 11, 12, 13, 14, 15, 17, 19, 22, 25, 29, 34, 39">10-39</option>
+            </optgroup>
+            <optgroup label="Wide-range 11-speed">
+              <option value="11, 13, 15, 17, 19, 21, 24, 27, 31, 35, 40">11-40</option>
+              <option value="11, 13, 15, 17, 19, 21, 24, 28, 32, 37, 42">11-42 Shimano</option>
+              <option value="10, 12, 14, 16, 18, 21, 24, 28, 32, 37, 42">10-42 SRAM</option>
+              <option value="11, 13, 15, 17, 19, 21, 24, 28, 33, 39, 45">11-45</option>
+              <option value="11, 13, 15, 17, 19, 22, 25, 28, 32, 37, 46">11-46 Shimano</option>
+              <option value="10, 12, 14, 16, 18, 21, 24, 28, 33, 39, 46">10-46</option>
+              <option value="11, 13, 15, 18, 21, 24, 28, 32, 36, 42, 50">11-50 SunRace</option>
+              <option value="11, 13, 15, 18, 21, 24, 28, 32, 36, 42, 51">11-51 SunRace</option>
+            </optgroup>
+            <optgroup label="Gravel 12-speed">
+              <option value="10, 11, 13, 15, 17, 19, 21, 24, 28, 32, 36, 42">10-42</option>
+              <option value="10, 11, 13, 15, 17, 19, 22, 25, 28, 32, 36, 44">10-44</option>
+              <option value="10, 11, 13, 15, 17, 20, 23, 26, 30, 34, 40, 46">10-46 SRAM XPLR</option>
+            </optgroup>
+            <optgroup label="MTB 9-speed">
+              <option value="11, 13, 15, 17, 20, 23, 26, 30, 34">11-34</option>
+              <option value="12, 14, 16, 18, 21, 24, 28, 32, 36">12-36</option>
+            </optgroup>
+            <optgroup label="MTB 10-speed">
+              <option value="11, 13, 15, 17, 19, 21, 24, 28, 32, 36">11-36</option>
+              <option value="11, 13, 15, 18, 21, 24, 28, 32, 36, 42">11-42</option>
+              <option value="11, 13, 15, 18, 21, 24, 28, 34, 40, 46">11-46</option>
+            </optgroup>
+            <optgroup label="MTB 12-speed SRAM">
+              <option value="10, 12, 14, 16, 18, 21, 24, 28, 32, 36, 42, 50">10-50 GX/X01/XX1</option>
+              <option value="10, 12, 14, 16, 18, 21, 24, 28, 33, 39, 45, 52" selected>10-52 GX/X01/XX1</option>
+            </optgroup>
+            <optgroup label="MTB 12-speed Shimano">
+              <option value="10, 12, 14, 16, 18, 21, 24, 28, 32, 36, 42, 51">10-51 XT/XTR</option>
+              <option value="10, 12, 14, 16, 18, 21, 24, 28, 33, 39, 45, 51">10-51 Deore</option>
+              <option value="10, 12, 14, 16, 18, 21, 24, 28, 32, 36, 45, 51">10-51 SLX</option>
+            </optgroup>
+            <optgroup label="Other">
+              <option value="custom">Custom...</option>
+            </optgroup>
+          </select>
+          <input type="text" class="input input-custom" id="cassette-b" value="10, 12, 14, 16, 18, 21, 24, 28, 33, 39, 45, 52" placeholder="e.g. 10, 12, 14, 16...">
+        </div>
+
+        <div class="input-row">
+          <div class="input-group">
+            <label class="label">Wheel (BSD)</label>
+            <select class="input" id="wheel-b">
+              <option value="305">16"</option>
+              <option value="457">18"</option>
+              <option value="406">20"</option>
+              <option value="507">24"</option>
+              <option value="559">26"</option>
+              <option value="584">27.5" / 650b</option>
+              <option value="622" selected>700c / 29"</option>
+              <option value="635">28"</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <label class="label">Tire Width</label>
+            <select class="input" id="tire-b">
+              <optgroup label="Road">
+                <option value="20">20mm</option>
+                <option value="23">23mm</option>
+                <option value="25" selected>25mm</option>
+                <option value="26">26mm</option>
+                <option value="28">28mm</option>
+                <option value="30">30mm</option>
+                <option value="32">32mm</option>
+              </optgroup>
+              <optgroup label="Gravel / Touring">
+                <option value="35">35mm</option>
+                <option value="38">38mm</option>
+                <option value="40">40mm</option>
+                <option value="42">42mm</option>
+                <option value="44">44mm</option>
+                <option value="47">47mm</option>
+              </optgroup>
+              <optgroup label="MTB">
+                <option value="50">50mm / 2.0"</option>
+                <option value="54">54mm / 2.1"</option>
+                <option value="57">57mm / 2.25"</option>
+                <option value="60">60mm / 2.35"</option>
+                <option value="63">63mm / 2.5"</option>
+                <option value="66">66mm / 2.6"</option>
+              </optgroup>
+              <optgroup label="Plus / Fat">
+                <option value="71">71mm / 2.8"</option>
+                <option value="76">76mm / 3.0"</option>
+                <option value="96">96mm / 3.8"</option>
+                <option value="102">102mm / 4.0"</option>
+                <option value="114">114mm / 4.5"</option>
+                <option value="122">122mm / 4.8"</option>
+              </optgroup>
+            </select>
+          </div>
+        </div>
+        <div class="input-group">
+          <label class="label">Crank Length (mm)</label>
+          <select class="input" id="crank-b">
+            <option value="160">160</option>
+            <option value="165">165</option>
+            <option value="167.5">167.5</option>
+            <option value="170" selected>170</option>
+            <option value="172.5">172.5</option>
+            <option value="175">175</option>
+            <option value="177.5">177.5</option>
+            <option value="180">180</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Cadence & Units -->
+      <section class="cadence-section">
+        <div class="cadence-row">
+          <div class="input-group">
+            <label class="label">Cadence (RPM)</label>
+            <input type="number" class="input" id="cadence" value="90" min="1" max="200">
+          </div>
+          <div class="input-group">
+            <label class="label">Speed Unit</label>
+            <div class="toggle">
+              <button type="button" class="toggle-btn active" data-unit="kmh">km/h</button>
+              <button type="button" class="toggle-btn" data-unit="mph">mph</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Results -->
+      <section class="results">
+        <h2 class="section-title">Gear Range Comparison</h2>
+
+        <div class="chart-container">
+          <div class="chart" id="chart"></div>
+          <div class="chart-axis" id="chart-axis"></div>
+          <p class="chart-label">Gear Inches</p>
+        </div>
+
+        <div class="stats-grid">
+          <div class="stat-card" data-stat="range-a">
+            <p class="stat-label">Range A</p>
+            <p class="stat-value" id="range-a">—</p>
+            <p class="stat-unit">percent</p>
+          </div>
+          <div class="stat-card" data-stat="range-b">
+            <p class="stat-label">Range B</p>
+            <p class="stat-value" id="range-b">—</p>
+            <p class="stat-unit">percent</p>
+          </div>
+          <div class="stat-card" data-stat="low-a">
+            <p class="stat-label">Lowest A</p>
+            <p class="stat-value" id="low-a">—</p>
+            <p class="stat-unit">gear inches</p>
+          </div>
+          <div class="stat-card" data-stat="low-b">
+            <p class="stat-label">Lowest B</p>
+            <p class="stat-value" id="low-b">—</p>
+            <p class="stat-unit">gear inches</p>
+          </div>
+          <div class="stat-card" data-stat="high-a">
+            <p class="stat-label">Highest A</p>
+            <p class="stat-value" id="high-a">—</p>
+            <p class="stat-unit">gear inches</p>
+          </div>
+          <div class="stat-card" data-stat="high-b">
+            <p class="stat-label">Highest B</p>
+            <p class="stat-value" id="high-b">—</p>
+            <p class="stat-unit">gear inches</p>
+          </div>
+          <div class="stat-card" data-stat="low-gain-a">
+            <p class="stat-label">Lowest Gain A</p>
+            <p class="stat-value" id="low-gain-a">—</p>
+            <p class="stat-unit">gain ratio</p>
+          </div>
+          <div class="stat-card" data-stat="low-gain-b">
+            <p class="stat-label">Lowest Gain B</p>
+            <p class="stat-value" id="low-gain-b">—</p>
+            <p class="stat-unit">gain ratio</p>
+          </div>
+          <div class="stat-card" data-stat="high-gain-a">
+            <p class="stat-label">Highest Gain A</p>
+            <p class="stat-value" id="high-gain-a">—</p>
+            <p class="stat-unit">gain ratio</p>
+          </div>
+          <div class="stat-card" data-stat="high-gain-b">
+            <p class="stat-label">Highest Gain B</p>
+            <p class="stat-value" id="high-gain-b">—</p>
+            <p class="stat-unit">gain ratio</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Gear Tables -->
+      <section class="tables">
+        <div class="table-wrap">
+          <h3 class="table-title">Drivetrain A — All Gears</h3>
+          <div class="table-scroll">
+            <table class="table" id="table-a">
+              <thead></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <h3 class="table-title">Drivetrain B — All Gears</h3>
+          <div class="table-scroll">
+            <table class="table" id="table-b">
+              <thead></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      <p>Gear inches = (chainring ÷ cog) × wheel diameter</p>
+      <p>Speed = gear inches × π × cadence × 60 ÷ 63360</p>
+    </footer>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
