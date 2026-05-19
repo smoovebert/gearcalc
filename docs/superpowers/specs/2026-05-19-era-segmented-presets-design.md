@@ -77,10 +77,11 @@ explicitly.
 | Touring Triple *(new)* | 48/36/26, 46/36/26, 48/38/28 |
 | MTB Triple *(new)* | 44/32/22, 42/32/22, 40/30/22 |
 
-**chainring.single**
+**chainring.single** — dense contiguous range, not a curated list, because
+single-speed/track/BMX fronts are free independent choices, not products.
 | Group | Options |
 |---|---|
-| Track / Single / BMX / FGFS *(new)* | 57, 55, 53, 50, 48, 46, 44, 36, 33, 30, 28, 25, 23 |
+| Track / Single / BMX / FGFS *(new)* | every integer 60→23t (`range(60,23)`) |
 
 **cassette.modern**: Road 11-speed, Road 12-speed Shimano, Road 12-speed
 SRAM, Road 13-speed Campagnolo, Wide-range 11-speed, Gravel 12-speed, MTB
@@ -91,10 +92,10 @@ SRAM, Road 13-speed Campagnolo, Wide-range 11-speed, Gravel 12-speed, MTB
 (13-28, 14-28, 14-32, 13-30), 7-speed, Road 8-speed, Road 9-speed, Road
 10-speed, MTB 9-speed.
 
-**cassette.single**
+**cassette.single** — dense contiguous range (same rationale).
 | Group | Options |
 |---|---|
-| Single cog *(new)* | 22, 20, 18, 16, 15, 14, 13, 12, 11, 10, 9, 8 (each a single value, label e.g. `16t`) |
+| Single cog *(new)* | every integer 24→8t (`range(24,8)`), each a single value |
 
 ### Tire sizes (`index.html`, `#tire-a` and `#tire-b`, both updated)
 

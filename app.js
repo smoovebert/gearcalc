@@ -13,6 +13,11 @@ const ones = (label, ...teeth) => ({
   options: teeth.map(t => [`${t}t`, String(t)]),
 });
 
+// Inclusive descending integer range, e.g. range(60, 23) -> [60,59,...,23].
+// Used for the Single set, where ring/cog are independent free choices
+// (not products) so a dense contiguous list beats a curated one.
+const range = (hi, lo) => Array.from({ length: hi - lo + 1 }, (_, i) => hi - i);
+
 const PRESETS = {
   chainring: {
     modern: [
@@ -41,8 +46,7 @@ const PRESETS = {
         ['40/30/22', '40, 30, 22'] ] },
     ],
     single: [
-      ones('Track / Single / BMX / FGFS',
-        57, 55, 53, 50, 48, 46, 44, 36, 33, 30, 28, 25, 23),
+      ones('Track / Single / BMX / FGFS', ...range(60, 23)),
     ],
   },
   cassette: {
@@ -142,7 +146,7 @@ const PRESETS = {
         ['12-36', '12, 14, 16, 18, 21, 24, 28, 32, 36'] ] },
     ],
     single: [
-      ones('Single cog', 22, 20, 18, 16, 15, 14, 13, 12, 11, 10, 9, 8),
+      ones('Single cog', ...range(24, 8)),
     ],
   },
 };
