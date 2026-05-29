@@ -144,7 +144,8 @@ const PRESETS = {
         ['14-32', '14, 16, 18, 21, 24, 28, 32'],
         ['13-30', '13, 15, 17, 20, 23, 26, 30'],
         ['11-28', '11, 13, 15, 17, 20, 24, 28'],
-        ['11-32', '11, 13, 15, 18, 21, 24, 32'] ] },
+        ['11-32', '11, 13, 15, 18, 21, 24, 32'],
+        ['12-32', '12, 14, 16, 18, 21, 26, 32'] ] },
       { group: 'Road 8-speed', options: [
         ['12-23', '12, 13, 14, 15, 17, 19, 21, 23'],
         ['11-24', '11, 12, 13, 14, 16, 18, 21, 24'],
@@ -200,27 +201,26 @@ function buildPresetOptions(selectEl, groups) {
   selectEl.appendChild(other);
 }
 
-// Active era ('modern'|'vintage'|'single') for a drivetrain ('a'|'b').
-function getEra(suffix) {
-  const active = document.querySelector(`#era-${suffix} .toggle-btn.active`);
+// Active era ('modern'|'vintage'|'single') for one of a drivetrain's selects.
+// suffix is 'a'|'b'; component is 'chainring'|'cassette'. Front (chainring) and
+// rear (cassette) eras are independent, so each has its own toggle.
+function getEra(suffix, component) {
+  const active = document.querySelector(`#era-${component}-${suffix} .toggle-btn.active`);
   return active ? active.dataset.era : 'modern';
 }
 
-// Repopulate a drivetrain's chainring + cassette selects for its era,
-// reset to the first option, hide/sync custom inputs, recompute.
-function applyEra(suffix) {
-  const era = getEra(suffix);
-  const cr = document.getElementById(`chainring-preset-${suffix}`);
-  const ca = document.getElementById(`cassette-preset-${suffix}`);
-  buildPresetOptions(cr, PRESETS.chainring[era]);
-  buildPresetOptions(ca, PRESETS.cassette[era]);
-  cr.selectedIndex = 0;
-  ca.selectedIndex = 0;
-  for (const [sel, customId] of [[cr, `chainrings-${suffix}`], [ca, `cassette-${suffix}`]]) {
-    const custom = document.getElementById(customId);
-    custom.classList.remove('visible');
-    custom.value = sel.value;
-  }
+// Repopulate one select (a drivetrain's chainring OR cassette) for its own
+// era, reset to the first option, hide/sync its custom input, recompute.
+function applyEra(suffix, component) {
+  const era = getEra(suffix, component);
+  const sel = document.getElementById(`${component}-preset-${suffix}`);
+  buildPresetOptions(sel, PRESETS[component][era]);
+  sel.selectedIndex = 0;
+  // Custom-input ids are irregular: chainring -> "chainrings-*", cassette -> "cassette-*".
+  const customId = component === 'chainring' ? `chainrings-${suffix}` : `cassette-${suffix}`;
+  const custom = document.getElementById(customId);
+  custom.classList.remove('visible');
+  custom.value = sel.value;
   update();
 }
 
@@ -533,18 +533,22 @@ setupPresetDropdown('chainring-preset-b', 'chainrings-b');
 setupPresetDropdown('cassette-preset-a', 'cassette-a');
 setupPresetDropdown('cassette-preset-b', 'cassette-b');
 
-// Per-drivetrain Era toggle (Modern / Vintage / Single). Scoped to its own
-// container so it cannot disturb the speed-unit toggle (same .toggle-btn class).
-['a', 'b'].forEach(suffix => {
-  const container = document.getElementById(`era-${suffix}`);
-  container.querySelectorAll('.toggle-btn[data-era]').forEach(btn => {
-    btn.addEventListener('click', () => {
-      container.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      applyEra(suffix);
+// Per-component Era toggle (Modern / Vintage / Single): one for each
+// drivetrain's chainring and cassette (4 total). Each is scoped to its own
+// container so toggles can't disturb each other or the speed-unit toggle
+// (all share the .toggle-btn class).
+for (const suffix of ['a', 'b']) {
+  for (const component of ['chainring', 'cassette']) {
+    const container = document.getElementById(`era-${component}-${suffix}`);
+    container.querySelectorAll('.toggle-btn[data-era]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        container.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        applyEra(suffix, component);
+      });
     });
-  });
-});
+  }
+}
 
 // Listen for other input changes
 document.querySelectorAll('#wheel-a, #wheel-b, #tire-a, #tire-b, #crank-a, #crank-b, #cadence').forEach(input => {
@@ -563,12 +567,15 @@ document.querySelectorAll('.toggle-btn[data-unit]').forEach(btn => {
 
 // Copy Drivetrain A → B
 document.getElementById('copy-a-to-b').addEventListener('click', () => {
-  // Mirror A's era first so B's option lists match A's set, then rebuild B.
-  const eraA = getEra('a');
-  document.querySelectorAll('#era-b .toggle-btn').forEach(b => {
-    b.classList.toggle('active', b.dataset.era === eraA);
-  });
-  applyEra('b');
+  // Mirror A's eras first (chainring + cassette independently) so B's option
+  // lists match A's sets, then rebuild B's selects.
+  for (const component of ['chainring', 'cassette']) {
+    const eraA = getEra('a', component);
+    document.querySelectorAll(`#era-${component}-b .toggle-btn`).forEach(b => {
+      b.classList.toggle('active', b.dataset.era === eraA);
+    });
+    applyEra('b', component);
+  }
 
   // Mirror the specific selections + custom values (B now has matching options)
   const presetA = document.getElementById('chainring-preset-a');

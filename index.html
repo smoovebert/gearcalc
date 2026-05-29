@@ -38,24 +38,27 @@
       <section class="drivetrain" id="drivetrain-a">
         <div class="drivetrain-header">
           <h2 class="drivetrain-title">Drivetrain A</h2>
-          <div style="display: flex; align-items: center; gap: var(--space-2);">
-            <div class="toggle era-toggle" id="era-a">
-              <button type="button" class="toggle-btn active" data-era="modern">Modern</button>
-              <button type="button" class="toggle-btn" data-era="vintage">Vintage</button>
-              <button type="button" class="toggle-btn" data-era="single">Single</button>
-            </div>
-            <div class="color-indicator" style="background: var(--color-a)"></div>
-          </div>
+          <div class="color-indicator" style="background: var(--color-a)"></div>
         </div>
 
         <div class="input-group">
           <label class="label">Chainring(s)</label>
+          <div class="toggle era-toggle" id="era-chainring-a">
+            <button type="button" class="toggle-btn active" data-era="modern">Modern</button>
+            <button type="button" class="toggle-btn" data-era="vintage">Vintage</button>
+            <button type="button" class="toggle-btn" data-era="single">Single</button>
+          </div>
           <select class="input" id="chainring-preset-a"></select>
           <input type="text" class="input input-custom" id="chainrings-a" value="50, 34" placeholder="e.g. 50, 34">
         </div>
 
         <div class="input-group">
           <label class="label">Cassette</label>
+          <div class="toggle era-toggle" id="era-cassette-a">
+            <button type="button" class="toggle-btn active" data-era="modern">Modern</button>
+            <button type="button" class="toggle-btn" data-era="vintage">Vintage</button>
+            <button type="button" class="toggle-btn" data-era="single">Single</button>
+          </div>
           <select class="input" id="cassette-preset-a"></select>
           <input type="text" class="input input-custom" id="cassette-a" value="11, 12, 13, 14, 16, 18, 20, 22, 25, 28, 32" placeholder="e.g. 11, 13, 15, 17...">
         </div>
@@ -146,11 +149,6 @@
         <div class="drivetrain-header">
           <h2 class="drivetrain-title">Drivetrain B</h2>
           <div style="display: flex; align-items: center; gap: var(--space-2);">
-            <div class="toggle era-toggle" id="era-b">
-              <button type="button" class="toggle-btn active" data-era="modern">Modern</button>
-              <button type="button" class="toggle-btn" data-era="vintage">Vintage</button>
-              <button type="button" class="toggle-btn" data-era="single">Single</button>
-            </div>
             <button type="button" class="copy-btn" id="copy-a-to-b">← copy A</button>
             <div class="color-indicator" style="background: var(--color-b)"></div>
           </div>
@@ -158,12 +156,22 @@
 
         <div class="input-group">
           <label class="label">Chainring(s)</label>
+          <div class="toggle era-toggle" id="era-chainring-b">
+            <button type="button" class="toggle-btn active" data-era="modern">Modern</button>
+            <button type="button" class="toggle-btn" data-era="vintage">Vintage</button>
+            <button type="button" class="toggle-btn" data-era="single">Single</button>
+          </div>
           <select class="input" id="chainring-preset-b"></select>
           <input type="text" class="input input-custom" id="chainrings-b" value="40" placeholder="e.g. 40">
         </div>
 
         <div class="input-group">
           <label class="label">Cassette</label>
+          <div class="toggle era-toggle" id="era-cassette-b">
+            <button type="button" class="toggle-btn active" data-era="modern">Modern</button>
+            <button type="button" class="toggle-btn" data-era="vintage">Vintage</button>
+            <button type="button" class="toggle-btn" data-era="single">Single</button>
+          </div>
           <select class="input" id="cassette-preset-b"></select>
           <input type="text" class="input input-custom" id="cassette-b" value="10, 12, 14, 16, 18, 21, 24, 28, 33, 39, 45, 52" placeholder="e.g. 10, 12, 14, 16...">
         </div>

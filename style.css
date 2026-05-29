@@ -336,8 +336,15 @@ select.input option {
 .toggle-btn:first-child {
 }
 
-/* Per-drivetrain Era toggle: compact so it fits the drivetrain header,
-   including alongside the copy button on Drivetrain B / narrow screens. */
+/* Per-component Era toggle: compact, sits above its preset select inside the
+   input-group. Hug content and left-align (override the default block-level
+   flex so it doesn't stretch to full width), with a small gap before the
+   select below it. */
+.era-toggle {
+  display: inline-flex;
+  width: fit-content;
+  margin-bottom: var(--space-1);
+}
 .era-toggle .toggle-btn {
   padding: 0.25rem 0.5rem;
   font-size: 0.6875rem;
